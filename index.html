@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>無題ドキュメント</title>
+	<script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" rel="stylesheet" type="text/css">
+</head>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBtrJffQG0WOBOtcu7vIlMqyb67AMG-_7k",
+    authDomain: "hikidashi-kids.firebaseapp.com",
+    projectId: "hikidashi-kids",
+    storageBucket: "hikidashi-kids.appspot.com",
+    messagingSenderId: "1098044820446",
+    appId: "1:1098044820446:web:01eab9ef98390069d72b4f",
+    measurementId: "G-7W0P9WGHJW"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+<body>
+	<h1>Firebase Authenction Sample 02</h1>
+  	<div id="auth"></div>
+  	<script src="/__/firebase/7.16.0/firebase-app.js"></script> 
+  	<script src="/__/firebase/7.16.0/firebase-auth.js"></script> 
+  	<script src="/__/firebase/init.js"></script> 
+  	<script type="text/javascript">
+		const provider = new firebase.auth.GoogleAuthProvider();
+
+	  function signIn() {
+	  firebase.auth().signInWithPopup(provider)
+	  .then(result => {
+		  console.log('ログインしました。');
+
+	  }).catch(error => {
+			const signinError = `
+			サインインエラー
+			エラーメッセージ： ${error.message}
+			エラーコード: ${error.code}
+			`
+		 console.log(signinError);
+	  });
+	  }
+
+	  function signOut() {
+	  firebase.auth().onAuthStateChanged(user => {
+		firebase
+		  .auth()
+		  .signOut()
+		  .then(() => {
+			console.log('ログアウトしました');
+			location.reload();
+		  })
+		  .catch((error) => {
+			console.log(`ログアウト時にエラーが発生しました (${error})`);
+		  });
+	  });
+	  }
+
+	  firebase.auth().onAuthStateChanged(user => {
+		if (user) {
+			const signOutMessage = `
+			<p>Hello, ${user.displayName}!<\/p>
+			<button class="btn btn-primary" type="submit"  onClick="signOut()">サインアウト<\/button>
+			`;
+			document.getElementById('auth').innerHTML =  signOutMessage;
+			console.log('ログインしています');
+
+		} else {
+			  const signInMessage = `
+			  <button class="btn btn-primary" type="submit"  onClick="signIn()">サインイン<\/button>
+			  `;
+			  document.getElementById('auth').innerHTML = signInMessage;       
+		}
+	  });
+  	</script>
+</body>
+</html>
